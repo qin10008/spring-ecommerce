@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ecommerce.mapper.ProductMapper">
+    <resultMap id="productMap" type="com.ecommerce.model.Product">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="description" property="description" />
+        <result column="price" property="price" />
+        <result column="stock" property="stock" />
+        <result column="category" property="category" />
+        <result column="image" property="image" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+        <result column="status" property="status" />
+    </resultMap>
+
+    <select id="selectById" parameterType="int" resultMap="productMap">
+        SELECT * FROM products WHERE id = #{id}
+    </select>
+
+    <select id="selectAll" resultMap="productMap">
+        SELECT * FROM products WHERE status = 1
+    </select>
+
+    <select id="selectByCategory" parameterType="string" resultMap="productMap">
+        SELECT * FROM products WHERE category = #{category} AND status = 1
+    </select>
+
+    <insert id="insert" parameterType="com.ecommerce.model.Product" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO products (name, description, price, stock, category, image, created_at, updated_at, status)
+        VALUES (#{name}, #{description}, #{price}, #{stock}, #{category}, #{image}, NOW(), NOW(), #{status})
+    </insert>
+
+    <update id="update" parameterType="com.ecommerce.model.Product">
+        UPDATE products SET name = #{name}, description = #{description}, price = #{price},
+        stock = #{stock}, category = #{category}, image = #{image}, updated_at = NOW(), status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM products WHERE id = #{id}
+    </delete>
+</mapper>

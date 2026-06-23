@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ecommerce.mapper.OrderMapper">
+    <resultMap id="orderMap" type="com.ecommerce.model.Order">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="total_price" property="totalPrice" />
+        <result column="status" property="status" />
+        <result column="shipping_address" property="shippingAddress" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <select id="selectById" parameterType="int" resultMap="orderMap">
+        SELECT * FROM orders WHERE id = #{id}
+    </select>
+
+    <select id="selectByUserId" parameterType="int" resultMap="orderMap">
+        SELECT * FROM orders WHERE user_id = #{userId} ORDER BY created_at DESC
+    </select>
+
+    <select id="selectAll" resultMap="orderMap">
+        SELECT * FROM orders ORDER BY created_at DESC
+    </select>
+
+    <insert id="insert" parameterType="com.ecommerce.model.Order" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO orders (user_id, total_price, status, shipping_address, created_at, updated_at)
+        VALUES (#{userId}, #{totalPrice}, #{status}, #{shippingAddress}, NOW(), NOW())
+    </insert>
+
+    <update id="update" parameterType="com.ecommerce.model.Order">
+        UPDATE orders SET user_id = #{userId}, total_price = #{totalPrice}, status = #{status},
+        shipping_address = #{shippingAddress}, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM orders WHERE id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ecommerce.mapper.UserMapper">
+    <resultMap id="userMap" type="com.ecommerce.model.User">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="email" property="email" />
+        <result column="phone" property="phone" />
+        <result column="first_name" property="firstName" />
+        <result column="last_name" property="lastName" />
+        <result column="address" property="address" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+        <result column="status" property="status" />
+        <result column="role" property="role" />
+    </resultMap>
+
+    <select id="selectById" parameterType="int" resultMap="userMap">
+        SELECT * FROM users WHERE id = #{id}
+    </select>
+
+    <select id="selectByUsername" parameterType="string" resultMap="userMap">
+        SELECT * FROM users WHERE username = #{username}
+    </select>
+
+    <select id="selectByEmail" parameterType="string" resultMap="userMap">
+        SELECT * FROM users WHERE email = #{email}
+    </select>
+
+    <select id="selectAll" resultMap="userMap">
+        SELECT * FROM users WHERE status = 1
+    </select>
+
+    <insert id="insert" parameterType="com.ecommerce.model.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO users (username, password, email, phone, first_name, last_name, address, created_at, updated_at, status, role)
+        VALUES (#{username}, #{password}, #{email}, #{phone}, #{firstName}, #{lastName}, #{address}, NOW(), NOW(), #{status}, #{role})
+    </insert>
+
+    <update id="update" parameterType="com.ecommerce.model.User">
+        UPDATE users SET username = #{username}, password = #{password}, email = #{email},
+        phone = #{phone}, first_name = #{firstName}, last_name = #{lastName}, address = #{address},
+        updated_at = NOW(), status = #{status}, role = #{role}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM users WHERE id = #{id}
+    </delete>
+</mapper>
